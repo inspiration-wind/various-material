@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>大型互联网数据中心（IDC）能效仿真器开发</title>
+    <style type="text/css">    </style>
+    <script>
+        function isHidden(oDiv){
+            var vDiv = document.getElementById(oDiv);
+            vDiv.style.display = (vDiv.style.display == 'none')?'block':'none';
+        }
+    </script>
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/左侧导航样式.css">
+    <link rel="stylesheet" href="css/内容块样式.css">
+</head>
+
+
+<body>
+<div id="container">
+
+    <!--左导航栏-->
+    <div id="left_aside">
+        <div align="center">
+            <br/>
+            <img src="img/logo.png" width="120">
+        </div>
+        <div align="center">
+            <ul>
+                <br/>
+                <div  style="cursor:hand" onclick="isHidden('div1')">服务器</div>
+                <div  id="div1">
+                    <li><pre>    <a class="fwq1" href="index.html">概况</a></pre> </li>
+                    <li><pre>    <a class="fwq1" href="sever_power.html">功耗</a></pre></li>
+                </div>
+            </ul>
+
+            <ul>
+                <br/>
+                <div  style="cursor:hand" onclick="isHidden('div2')">温度</div>
+                <div  id="div2">
+                    <li><pre>  <a class="fwq1" href="spring.html">春</a></pre> </li>
+                    <li><pre>  <a class="fwq1" href="summer.html">夏</a></pre></li>
+                    <li><pre>  <a class="fwq1" href="autumn.html">秋</a></pre></li>
+                    <li><pre>  <a class="fwq1" href="winter.html">冬</a></pre></li>
+                </div>
+            </ul>
+
+            <ul>
+                <br/>
+                <div  style="cursor:hand" onclick="isHidden('div3')">电流</div>
+                <div  id="div3">
+                    <li><pre>    <a class="fwq1" href="power_consumption.html">耗电量</a></pre> </li>
+                </div>
+            </ul>
+
+            <ul>
+                <br/>
+                <div  style="cursor:hand" onclick="isHidden('div4')">团队</div>
+                <div  id="div4">
+                    <li><pre>    <a class="fwq1" href="personage_introduction.html">蒋从锋</a></pre> </li>
+                    <li><pre>    <a class="fwq1" href="personage_introduction.html">仇烨亮</a></pre></li>
+                    <li><pre>    <a class="fwq1" href="personage_introduction.html">施亦豪</a></pre></li>
+                    <li><pre>    <a class="fwq1" href="personage_introduction.html">谢楠</a></pre></li>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <!--内容-->
+    <div id="content">
+         <div id="c_title">
+             <h2 align="center">welcome!</h2>
+         </div>
+
+        <br/>
+
+        <div id="fk">
+
+
+        </div>
+        <br/>
+
+
+        <!--图表部分-->
+         <div class="tb">
+             <div class="tb1">
+                tubiao1
+             </div>
+
+
+             <div class="tb1">
+                 <div>
+                     tubiao2
+                 </div>
+             </div>
+         </div>
+
+    </div>
+
+    <!--底部-->
+    <div id="footer">
+        <br/>
+        <pre align="center">杭州电子科技大学      @xn</pre>
+    </div>
+</div>
+
+<script>
+    function submitData(){
+        <!--2、在js部分，通过document.getElementById函数可以找到此页面的唯一id标记的标签-->
+        var xiao= document.getElementById("num1").value;//这是输入的两个值的标记
+        var da= document.getElementById("num2").value;
+        var out1 = document.getElementById("out1");//这是输出值的标记
+        var XHR = new XMLHttpRequest();
+        XHR.onreadystatechange = function() {
+            if (XHR.readyState == 4) {
+                if ((XHR.status >= 200 && XHR.status < 300) || XHR.status == 304) {
+                    //3、1获取到数据，可输入到控制台或者网页，以此检验数据是否正确
+                    console.log(XHR.responseText);//3、2这是将获取到的API输入到控制台，这是字符串格式
+                    var data1=XHR.responseText;
+                    console.log(JSON.parse(data1)['server']);//3、3这是输出json格式
+                    console.log(JSON.parse(data1)['time']);
+                    console.log(JSON.parse(data1)['info']);
+                    out1.value = JSON.parse(data1)['server'];//3、4如果想要将返回的数据返回到网页里面，可以重新定义一个变量，用id标记，同时在HTML代码中返回
+                }
+                else{
+                    console.log("Request was unsuccessful: "+XHR.status);
+                }
+            }
+        };
+        var url = "http://127.0.0.1:8080/vescope/main/data/"+xiao +"/"+da;
+        console.log(url);
+        XHR.open("get",url,true);
+        XHR.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        XHR.send();
+    }
+</script>
